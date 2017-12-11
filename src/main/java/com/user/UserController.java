@@ -1,20 +1,16 @@
 package com.user;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.*;
-import org.springframework.boot.autoconfigure.*;
-import org.springframework.stereotype.*;
-import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.*;
+import org.springframework.boot.autoconfigure.*;
 import org.springframework.boot.autoconfigure.web.ErrorController;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import org.springframework.stereotype.*;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 @RestController
 public class UserController implements ErrorController {
@@ -29,7 +25,7 @@ public class UserController implements ErrorController {
 
   @RequestMapping(value = PATH)
   public String error() {
-    return "Error handling: Either First name or Email not provided, Please send both First name and Email in request";
+    return "Error handling paramters: Not all parameters provided for this API, Please see the API requirements.";
   }
 
   @Override
@@ -53,7 +49,6 @@ public class UserController implements ErrorController {
     }
 
     User user = new User();
-
     if (Utils.validateFirstName(firstName)) {
       user.setFirstName(firstName);
     } else {
@@ -135,6 +130,17 @@ public class UserController implements ErrorController {
   public String transfer(@RequestParam(value = "email") String email,
                         @RequestParam(value = "action") String action,
                         @RequestParam(value = "amount") String amount) {
+
+    if (!Utils.validateEmail(email)) {
+      return "Problem in Email. Make sure you enter a proper emailID";
+    }
+    if (!Utils.validateAmount(amount)) {
+      return "Problem in Amount. Make sure you enter a proper value for Amount";
+    }
+    if (!Utils.validateAction(action)) {
+      return "Problem in action type. Make sure you enter either add or remove";
+    }
+
     int points = 0;
     points = validateCacheItemExist(cache.getCache(), email);
     if (points == -1) {
