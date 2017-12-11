@@ -10,7 +10,7 @@ import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestController
 public class UserController implements ErrorController {
@@ -172,7 +172,7 @@ public class UserController implements ErrorController {
     actionList.add(Integer.parseInt(amount));
   }
 
-  public int validateCacheItemExist(LinkedHashMap<String, Integer> cache, String email) {
+  public int validateCacheItemExist(Map<String, Integer> cache, String email) {
     int pointIfUserExistInDb = 0;
 
     if (!cache.containsKey(email)){
@@ -187,7 +187,7 @@ public class UserController implements ErrorController {
     return pointIfUserExistInDb;
   }
 
-  public void validateTransferCacheItemExist(LinkedHashMap<String, ArrayList<Integer>> cache, String email) {
+  public void validateTransferCacheItemExist(Map<String, ArrayList<Integer>> cache, String email) {
     if (!cache.containsKey(email)){
       String actionList = userService.getUserTransferDataFromDb(email);
       String[] actionsItems = actionList.split(",");

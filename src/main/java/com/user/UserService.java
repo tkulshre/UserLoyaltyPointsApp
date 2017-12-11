@@ -23,12 +23,12 @@ public class UserService {
   @Autowired
   private JdbcTemplate jdbcTemplate;
 
-  public int addUserInDb(User user){
+  public synchronized int addUserInDb(User user){
     String sql = "INSERT INTO USER(first_name, last_name, email) VALUES(?,?,?)";
     return jdbcTemplate.update(sql, user.getFirstName(), user.getLastName(), user.getEmail());
   }
 
-  public int updateTransferInDb(String email, String data){
+  public synchronized int updateTransferInDb(String email, String data){
     String sql = "UPDATE USER_TRANSFER SET action_list = action_list + \'" + data + "\' WHERE email = \'" + email + "\'";
     return jdbcTemplate.update(sql);
   }
@@ -53,7 +53,7 @@ public class UserService {
     }
   }
 
-  public int updateUserPointsInDb(String email, Integer points){
+  public synchronized int updateUserPointsInDb(String email, Integer points){
     String sql = "UPDATE USER SET points =" + points + " WHERE email = \'" + email + "\'";
     return jdbcTemplate.update(sql);
   }
